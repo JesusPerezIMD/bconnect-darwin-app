@@ -16,7 +16,7 @@ class BconnectAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('BConnect Forms - Clientes'),
+      title: const Text('BConnect Darwin - Busqueda'),
       actions: [
         IconButton(
           padding: const EdgeInsets.all(0),

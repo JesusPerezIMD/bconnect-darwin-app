@@ -55,19 +55,8 @@ class _NavigationBarComponenetState extends State<NavigationBarComponenet> {
           (route) => false,
         );
         break;
-      case 3:
+      case 1:
         onSignOut(context);
-
-        // Navigator.pushAndRemoveUntil(
-        //   context,
-        //   PageRouteBuilder(
-        //     pageBuilder: (context, animation1, animation2) =>
-        //         const OrdersPage(),
-        //     transitionDuration: Duration.zero,
-        //     reverseTransitionDuration: Duration.zero,
-        //   ),
-        //   (route) => false,
-        // );
         break;
       default:
     }
