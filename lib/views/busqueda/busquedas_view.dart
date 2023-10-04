@@ -24,15 +24,26 @@ class BusquedasPage extends StatefulWidget {
 }
 
 class _BusquedasPageState extends State<BusquedasPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Encuestas Page'),
+final _formKey = GlobalKey<FormState>();
+BCUser? user;
+BCColaborador? colaborador;
+
+@override
+Widget build(BuildContext context) {
+  final userInitials =
+        '${(user?.names ?? '') == '' ? '' : (user?.names ?? '').substring(0, 1)}${(user?.lastNames ?? '') == '' ? '' : (user?.lastNames ?? '').substring(0, 1)}';
+  return Scaffold(
+    appBar: BconnectAppBar(
+        onPressed: () => {
+          Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (BuildContext context) => AccountPage(
+                      user ?? BCUser(), colaborador ?? BCColaborador())))
+        },
+        userInitials: userInitials,
       ),
-      body: Center(
-        child: Text('Esta es la página de Encuestas'),
-      ),
-    );
-  }
+    bottomNavigationBar: const NavigationBarComponenet(0), // asume que esto es lo único que necesitas
+  );
+}
 }
