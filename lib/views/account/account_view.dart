@@ -1,5 +1,5 @@
 import 'package:bconnect_darwin_app/models/bc_colaborador.dart';
-import 'package:bconnect_forms_clientes/views/encuestas/encuestas_view.dart';
+import 'package:bconnect_darwin_app/views/busqueda/busquedas_view.dart';
 import 'package:flutter/material.dart';
 import 'package:bconnect_darwin_app/helpers/preferences_helper.dart';
 import 'package:bconnect_darwin_app/models/bc_user.dart';
@@ -118,7 +118,7 @@ class _AccountPageState extends State<AccountPage> {
                     context,
                     MaterialPageRoute<void>(
                         builder: (BuildContext context) =>
-                            const EncuestasPage()),
+                            const BusquedasPage()),
                     (route) => false);
               },
               style: ButtonStyle(
