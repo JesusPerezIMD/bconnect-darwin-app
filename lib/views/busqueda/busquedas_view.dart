@@ -183,43 +183,36 @@ class _BusquedasPageState extends State<BusquedasPage> {
                 ),
               ),
             ),
-Expanded(
-  child: ListView.builder(
-    itemCount: uniqueCUCs.length,
-    itemBuilder: (context, index) {
-      // Filtra los reportes que coincidan con el CUC seleccionado
-      final List<DarwinData> selectedReports = reportes.where((r) => r.cuc == uniqueCUCs[index]).toList();
-      
-      // Se asume que todos los reportes con el mismo CUC tendrán el mismo nomcliente, así que usamos el primero que encontramos
-      final String clientName = selectedReports.isNotEmpty ? (selectedReports[0].nomcliente ?? '') : '';
-
-      
-      return ListTile(
-        leading: CircleAvatar(
-          backgroundColor: Colors.grey[200],
-          child: Icon(
-            Icons.location_on,
-            color: Colors.green,
-          ),
-        ),
-        title: Text('${uniqueCUCs[index]}'), // Muestra el CUC único
-        subtitle: Text(clientName), // Muestra el nombre del cliente correspondiente
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => DarwinDetailComponent(
-                darwins: selectedReports,
-                cuc: uniqueCUCs[index].toString(), // Convertimos el CUC a String para el título
-              ),
-            ),
-          );
-        },
-      );
-    },
-  ),
-)
-
-
+              Expanded(
+                child: ListView.builder(
+                  itemCount: uniqueCUCs.length,
+                  itemBuilder: (context, index) {
+                    final List<DarwinData> selectedReports = reportes.where((r) => r.cuc == uniqueCUCs[index]).toList();
+                    final String clientName = selectedReports.isNotEmpty ? (selectedReports[0].nomcliente ?? '') : '';
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.grey[200],
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.green,
+                        ),
+                      ),
+                      title: Text('${uniqueCUCs[index]}'), // Muestra el CUC único
+                      subtitle: Text(clientName), // Muestra el nombre del cliente correspondiente
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DarwinDetailComponent(
+                              darwins: selectedReports,
+                              cuc: uniqueCUCs[index].toString(), // Convertimos el CUC a String para el título
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ),
