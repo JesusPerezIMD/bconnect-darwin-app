@@ -28,35 +28,47 @@ class _BusquedasPageState extends State<BusquedasPage> {
   BCUser? user;
   BCColaborador? colaborador;
   DarwinData? cuc;
-
-  List<String> cedisList = ['Cedis 1', 'Cedis 2', 'Cedis 3'];
-  String? selectedCedis = 'Cedis 1'; // Inicializado con un valor por defecto
-
-  List<String> periodList = ['Periodo 1', 'Periodo 2', 'Periodo 3'];
-  String? selectedPeriod = 'Periodo 1'; 
-
+  
+  List<String> cedisList = [];
+  String? selectedCedis;
+  List<String> periodList = ['Todos', 'Semana', 'Hoy'];
+  String? selectedPeriod = 'Todos'; // por defecto seleccionado
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
 
   final TextEditingController _searchController = TextEditingController();
 
-    @override
-    void initState() {
-      super.initState();
-      loadReportes();
+  @override
+  void initState() {
+    super.initState();
+    loadReportes(null);
+    // Agregar 'Todos' al inicio de la lista
+    cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
+    if (cedisList.isNotEmpty) {
+      selectedCedis = cedisList.first; // selecciona un valor por defecto si la lista no está vacía
     }
+  }
 
-    void loadReportes() async {
-      try {
+  void loadReportes(String? dateFilter) async {
+    try {
+      if(dateFilter != null) {
+        reportes = await BConnectService().getReportesByDate(dateFilter);
+      } else {
         reportes = await BConnectService().getReportes();
-        uniqueCUCs = reportes.where((e) => e.cuc != null).map((e) => e.cuc!).toSet().toList();
-        
-        setState(() {});
-      } catch (e) {
-        // Handle error as needed
-        print("Error loading data: $e");
       }
+
+      uniqueCUCs = reportes.where((e) => e.cuc != null).map((e) => e.cuc!).toSet().toList();
+      cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
+      
+      if (cedisList.isNotEmpty) {
+        selectedCedis = 'Todos'; // Set to 'Todos'
+      }
+
+      setState(() {});
+    } catch (e) {
+      print("Error loading data: $e");
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,13 +128,12 @@ class _BusquedasPageState extends State<BusquedasPage> {
                         value: selectedCedis,
                         label: "Cedis",
                         list: cedisList,
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() => selectedCedis = value);
-                            _BusquedasPageState();
+                        onChanged: (String? newValue) {
+                          if (newValue != null && newValue.isNotEmpty) {
                             setState(() {
-                              selectedCedis = null;
+                              selectedCedis = newValue;
                             });
+                            // Aquí puedes hacer otras operaciones que necesites realizar cuando selectedCedis cambie
                           }
                         },
                       ),
@@ -136,13 +147,12 @@ class _BusquedasPageState extends State<BusquedasPage> {
                         value: selectedPeriod,
                         label: "Periodo",
                         list: periodList,
-                        onChanged: (value) {
-                          if (value != null) {
-                            setState(() => selectedPeriod = value);
-                            _BusquedasPageState();
+                        onChanged: (String? newValue) {
+                          if (newValue != null && newValue.isNotEmpty) {
                             setState(() {
-                              selectedPeriod = null;
+                              selectedPeriod = newValue;
                             });
+                            loadReportes(newValue); // Load reportes with selected period
                           }
                         },
                       ),
@@ -183,36 +193,40 @@ class _BusquedasPageState extends State<BusquedasPage> {
                 ),
               ),
             ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: uniqueCUCs.length,
-                  itemBuilder: (context, index) {
-                    final List<DarwinData> selectedReports = reportes.where((r) => r.cuc == uniqueCUCs[index]).toList();
-                    final String clientName = selectedReports.isNotEmpty ? (selectedReports[0].nomcliente ?? '') : '';
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.grey[200],
-                        child: Icon(
-                          Icons.location_on,
-                          color: Colors.green,
-                        ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: uniqueCUCs.length,
+                itemBuilder: (context, index) {
+                  // Aquí se aplica el filtro según el selectedCedis
+                  final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
+                    reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
+                    reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
+                  if (selectedReports.isEmpty) return SizedBox.shrink(); 
+                  final String clientName = selectedReports.isNotEmpty ? (selectedReports[0].nomcliente ?? '') : '';
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.grey[200],
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.green,
                       ),
-                      title: Text('${uniqueCUCs[index]}'), // Muestra el CUC único
-                      subtitle: Text(clientName), // Muestra el nombre del cliente correspondiente
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DarwinDetailComponent(
-                              darwins: selectedReports,
-                              cuc: uniqueCUCs[index].toString(), // Convertimos el CUC a String para el título
-                            ),
+                    ),
+                    title: Text('${uniqueCUCs[index]}'), // Muestra el CUC único
+                    subtitle: Text(clientName), // Muestra el nombre del cliente correspondiente
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => DarwinDetailComponent(
+                            darwins: selectedReports,
+                            cuc: uniqueCUCs[index].toString(), // Convertimos el CUC a String para el título
                           ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              )
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
             ],
           ),
         ),

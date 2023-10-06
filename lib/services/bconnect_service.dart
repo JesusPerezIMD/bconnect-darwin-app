@@ -9,6 +9,7 @@ class BConnectService {
   String apiUrl = Environment().BCONNECT_API;
   String apiBitacora = Environment().BITACORA_API;
   String apiReportes = Environment().GETREPORTES;
+  String apiReportesByDate = Environment().GETREPORTESBYDATE;
 
   BConnectService();
 
@@ -126,5 +127,29 @@ class BConnectService {
       throw e;
     }
   }
+
+  Future<List<DarwinData>> getReportesByDate(String date) async {
+  try {
+    List<DarwinData> reportes = [];
+    final response = await http.get(
+      Uri.parse("$apiReportesByDate/$date"),
+      headers: {
+      }
+    );
+    if (response.statusCode == 200) {
+      final result = jsonDecode(response.body);
+      for (var data in result) {
+        reportes.add(DarwinData.fromJson(data));
+      }
+    } else {
+      throw Exception('Failed to load reportes by date, status code: ${response.statusCode}');
+    }
+    return reportes;
+  } catch (e) {
+    print('Error loading reportes by date: $e');
+    throw e;
+  }
+}
+
 
 }
