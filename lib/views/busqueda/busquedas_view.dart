@@ -27,6 +27,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
   final _formKey = GlobalKey<FormState>();
   BCUser? user;
   BCColaborador? colaborador;
+  DarwinData? cuc;
 
   List<String> cedisList = ['Cedis 1', 'Cedis 2', 'Cedis 3'];
   String? selectedCedis = 'Cedis 1'; // Inicializado con un valor por defecto
@@ -39,21 +40,23 @@ class _BusquedasPageState extends State<BusquedasPage> {
 
   final TextEditingController _searchController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    loadReportes();
-  }
-
-void loadReportes() async {
-    try {
-      reportes = await BConnectService().getReportes();
-      setState(() {});
-    } catch (e) {
-      // Handle error as needed
-      print("Error loading data: $e");
+    @override
+    void initState() {
+      super.initState();
+      loadReportes();
     }
-}
+
+    void loadReportes() async {
+      try {
+        reportes = await BConnectService().getReportes();
+        uniqueCUCs = reportes.where((e) => e.cuc != null).map((e) => e.cuc!).toSet().toList();
+        
+        setState(() {});
+      } catch (e) {
+        // Handle error as needed
+        print("Error loading data: $e");
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -180,27 +183,43 @@ void loadReportes() async {
                 ),
               ),
             ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: reportes.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.grey[200], // Define el color de fondo del círculo
-                        child: Icon(
-                          Icons.location_on, // Este es un ícono de pin de ubicación
-                          color: Colors.green, // Define el color del ícono
-                        ),
-                      ),
-                      title: Text('${reportes[index].cuc}'), // Muestra el CUC
-                      subtitle: Text('${reportes[index].nomcliente}'), // Muestra el nombre del cliente
-                      onTap: () {
-                        // Define lo que sucederá cuando se presione este ListTile
-                      },
-                    );
-                  },
-                ),
+Expanded(
+  child: ListView.builder(
+    itemCount: uniqueCUCs.length,
+    itemBuilder: (context, index) {
+      // Filtra los reportes que coincidan con el CUC seleccionado
+      final List<DarwinData> selectedReports = reportes.where((r) => r.cuc == uniqueCUCs[index]).toList();
+      
+      // Se asume que todos los reportes con el mismo CUC tendrán el mismo nomcliente, así que usamos el primero que encontramos
+      final String clientName = selectedReports.isNotEmpty ? (selectedReports[0].nomcliente ?? '') : '';
+
+      
+      return ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.grey[200],
+          child: Icon(
+            Icons.location_on,
+            color: Colors.green,
+          ),
+        ),
+        title: Text('${uniqueCUCs[index]}'), // Muestra el CUC único
+        subtitle: Text(clientName), // Muestra el nombre del cliente correspondiente
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => DarwinDetailComponent(
+                darwins: selectedReports,
+                cuc: uniqueCUCs[index].toString(), // Convertimos el CUC a String para el título
               ),
+            ),
+          );
+        },
+      );
+    },
+  ),
+)
+
+
             ],
           ),
         ),
