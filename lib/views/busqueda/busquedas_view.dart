@@ -29,12 +29,31 @@ class _BusquedasPageState extends State<BusquedasPage> {
   BCColaborador? colaborador;
 
   List<String> cedisList = ['Cedis 1', 'Cedis 2', 'Cedis 3'];
-  String? selectedCedis;
+  String? selectedCedis = 'Cedis 1'; // Inicializado con un valor por defecto
 
   List<String> periodList = ['Periodo 1', 'Periodo 2', 'Periodo 3'];
-  String? selectedPeriod;
+  String? selectedPeriod = 'Periodo 1'; 
+
+  List<DarwinData> reportes = [];
+  List<int> uniqueCUCs = [];
 
   final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loadReportes();
+  }
+
+void loadReportes() async {
+    try {
+      reportes = await BConnectService().getReportes();
+      setState(() {});
+    } catch (e) {
+      // Handle error as needed
+      print("Error loading data: $e");
+    }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +74,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
             child: Container(
               height: 50.0, // Altura ajustada del botón
               width: double.infinity,
@@ -64,7 +83,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
                   // Inserta la lógica para descargar el reporte
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.orange),
+                  backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
                 ),
                 child: Text(
                   'Descargar Reporte',
@@ -88,53 +107,100 @@ class _BusquedasPageState extends State<BusquedasPage> {
               Row(
                 children: [
                   Expanded(
-                    child: DropdownButtonFormField(
-                      value: selectedCedis,
-                      decoration: InputDecoration(labelText: 'Cedis'),
-                      items: cedisList.map((cedis) {
-                        return DropdownMenuItem(
-                          value: cedis,
-                          child: Text(cedis),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCedis = value as String?;
-                        });
-                      },
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: DropdownButtonExample(
+                        value: selectedCedis,
+                        label: "Cedis",
+                        list: cedisList,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => selectedCedis = value);
+                            _BusquedasPageState();
+                            setState(() {
+                              selectedCedis = null;
+                            });
+                          }
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(width: 10),
                   Expanded(
-                    child: DropdownButtonFormField(
-                      value: selectedPeriod,
-                      decoration: InputDecoration(labelText: 'Periodo'),
-                      items: periodList.map((period) {
-                        return DropdownMenuItem(
-                          value: period,
-                          child: Text(period),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedPeriod = value as String?;
-                        });
-                      },
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: DropdownButtonExample(
+                        value: selectedPeriod,
+                        label: "Periodo",
+                        list: periodList,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() => selectedPeriod = value);
+                            _BusquedasPageState();
+                            setState(() {
+                              selectedPeriod = null;
+                            });
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 10),
-              TextFormField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  labelText: 'Buscar clientes',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
+            Material(
+              elevation: 0.5,
+              child: Container(
+                margin: const EdgeInsets.all(10),
+                child: ListTile(
+                  dense: false,
+                  visualDensity: VisualDensity(vertical: -3.4),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: -20),
+                  shape: const RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.grey, width: 0.5),
+                      borderRadius: BorderRadius.all(Radius.circular(20))),
+                  leading: Padding(
+                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                      size: 24,
+                    ),
+                  ),
+                  horizontalTitleGap: 0,
+                  title: _searchController.text.isEmpty
+                      ? Text('Buscar cliente',
+                          style: TextStyle(fontSize: 16, color: Colors.grey))
+                      : Text(_searchController.text,
+                          style: TextStyle(fontSize: 16)),
+                  onTap: () {
+                    // Implement your search logic here
+                  },
                 ),
-                // Implementa la lógica de búsqueda
               ),
-              // ... Añade más widgets si los necesitas
+            ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: reportes.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.grey[200], // Define el color de fondo del círculo
+                        child: Icon(
+                          Icons.location_on, // Este es un ícono de pin de ubicación
+                          color: Colors.green, // Define el color del ícono
+                        ),
+                      ),
+                      title: Text('${reportes[index].cuc}'), // Muestra el CUC
+                      subtitle: Text('${reportes[index].nomcliente}'), // Muestra el nombre del cliente
+                      onTap: () {
+                        // Define lo que sucederá cuando se presione este ListTile
+                      },
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

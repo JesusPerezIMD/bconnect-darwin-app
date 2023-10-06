@@ -9,6 +9,7 @@ class Environment {
   // final ALIADOS_API = 'https://localhost:44376/api';
   // final UrlApiImages = 'https://localhost:44376/';
   // final TWILIO_API = 'http://localhost:7071/api';
+   final GETREPORTES = 'http://localhost:7268/api/Darwin/GetReportes';
   // final WHATSAPP_NUMBER = "15165185350";
 
   //Test

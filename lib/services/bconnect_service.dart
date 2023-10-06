@@ -8,6 +8,7 @@ class BConnectService {
   String? token;
   String apiUrl = Environment().BCONNECT_API;
   String apiBitacora = Environment().BITACORA_API;
+  String apiReportes = Environment().GETREPORTES;
 
   BConnectService();
 
@@ -100,4 +101,30 @@ class BConnectService {
       throw Exception(e);
     }
   }
+
+  Future<List<DarwinData>> getReportes() async {
+    try {
+      List<DarwinData> reportes = [];
+      final response = await http.get(
+        Uri.parse(apiReportes),
+        headers: {
+          // Tus headers aquí
+        }
+      );
+      if (response.statusCode == 200) {
+        //print('Raw response: ${response.body}'); // Imprime la respuesta en bruto
+        final result = jsonDecode(response.body);
+        for (var data in result) {
+          reportes.add(DarwinData.fromJson(data));
+        }
+      } else {
+        throw Exception('Failed to load reportes, status code: ${response.statusCode}');
+      }
+      return reportes;
+    } catch (e) {
+      print('Error loading reportes: $e');
+      throw e;
+    }
+  }
+
 }
