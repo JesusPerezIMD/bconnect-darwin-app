@@ -24,33 +24,35 @@ class DarwinDetailComponent extends StatelessWidget {
       required this.cuc
   }) : super(key: key);
 
-  Widget _buildRow(Icon icon, String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              icon, // Display the icon
-              const SizedBox(width: 5),
-              Text(
-                title,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              )
-            ],
+Widget _buildRow(Icon icon, String title, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 40,
+          child: Center(  // Puedes usar Center o Align, dependiendo de la alineación exacta que desees.
+            child: icon,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 25.0),
-            child: Text(
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            Text(
               value,
               style: TextStyle(fontSize: 14, color: Colors.black),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -67,43 +69,59 @@ class DarwinDetailComponent extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Semana: $week'),
+              _buildRow(const Icon(Icons.calendar_month, size: 20), 'Semana:', week),
               CustomDividerComponent(text: 'Datos del Preventista'),
               _buildRow(const Icon(Icons.info, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
               _buildRow(const Icon(Icons.info, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
               _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
               CustomDividerComponent(text: 'Datos del Producto'),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4.0),
-                child: Row(
-                  children: [
-                    Expanded(child: Text('Producto')),
-                    Expanded(child: Text('Codigo')),
-                    Expanded(child: Text('Lun')),
-                    Expanded(child: Text('Mar')),
-                    // ... More headers for other days
-                  ],
-                ),
+              Scrollbar(
+              child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4.0),
+                    child: Row(
+                      children: [
+                        Container(width: 300, child: Text('Producto', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 100, child: Text('Codigo', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 50, child: Text('Lun', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 50, child: Text('Mar', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 50, child: Text('Mie', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 50, child: Text('Jue', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 50, child: Text('Vie', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                        Container(width: 50, child: Text('Sab', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                      ],
+                    ),
+                  ),
+                  ...weekDarwins.map((darwin) => 
+                    Row(
+                      children: [
+                        Container(
+                          width: 300,
+                          child: Row(
+                            children: [
+                              Icon(Icons.label, color: Colors.black, size: 20),
+                              SizedBox(width: 4),
+                              Text('${darwin.producto}', style: TextStyle(fontSize: 14, color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                        Container(width: 100, child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        Container(width: 50, child: Text('${darwin.lun}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        Container(width: 50, child: Text('${darwin.mar}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        Container(width: 50, child: Text('${darwin.mie}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        Container(width: 50, child: Text('${darwin.jue}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        Container(width: 50, child: Text('${darwin.vie}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        Container(width: 50, child: Text('${darwin.sab}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                      ],
+                    )
+                  ).toList(),
+                ],
               ),
-              ...weekDarwins.map((darwin) => 
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text('${darwin.producto}'),
-                    ),
-                    Expanded(
-                      child: Text('${darwin.codProDarwin}'),
-                    ),
-                    Expanded(
-                      child: Text('${darwin.lun}'),
-                    ),
-                    Expanded(
-                      child: Text('${darwin.mar}'),
-                    ),
-                    //... More days
-                  ],
-                )
-              ).toList(),       
+            ),
+            ),
               SizedBox(height: 16),
             ],
           );

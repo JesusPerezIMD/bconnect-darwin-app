@@ -36,17 +36,15 @@ class _BusquedasPageState extends State<BusquedasPage> {
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
   
-
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     loadReportes(null);
-    // Agregar 'Todos' al inicio de la lista
     cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
     if (cedisList.isNotEmpty) {
-      selectedCedis = cedisList.first; // selecciona un valor por defecto si la lista no está vacía
+      selectedCedis = cedisList.first; 
     }
   }
 
@@ -162,78 +160,72 @@ class _BusquedasPageState extends State<BusquedasPage> {
                 ],
               ),
               SizedBox(height: 10),
-Material(
-  elevation: 0.5,
-  child: Container(
-    margin: const EdgeInsets.all(10),
-    child: TextField(
-      controller: _searchController,
-      decoration: InputDecoration(
-        hintText: 'Buscar cliente',
-        prefixIcon: Icon(Icons.search, color: Colors.grey),
-        filled: true,
-        fillColor: Colors.white,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          borderSide: BorderSide(color: Colors.grey, width: 0.5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-          borderSide: BorderSide(color: Colors.grey, width: 0.5),
-        ),
-      ),
-      onChanged: (value) {
-        // Este método será llamado cada vez que el texto cambie.
-        setState(() {}); // Esto reconstruirá el widget con los datos filtrados.
-      },
-    ),
-  ),
-),
-
-            Expanded(
-  child: ListView.builder(
-    itemCount: uniqueCUCs.length,
-    itemBuilder: (context, index) {
-      // Aquí se aplica el filtro según el selectedCedis
-      final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
-        reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
-        reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
-
-      // Filtro adicional basado en la entrada de búsqueda
-      final filteredReports = selectedReports.where((report) {
-        final cuc = report.cuc?.toString() ?? '';
-        final nomcliente = report.nomcliente ?? '';
-        final searchLower = _searchController.text.toLowerCase();
-        return cuc.toLowerCase().contains(searchLower) || nomcliente.toLowerCase().contains(searchLower);
-      }).toList();
-
-      // Reemplaza selectedReports con filteredReports debajo
-      if (filteredReports.isEmpty) return SizedBox.shrink(); 
-      final String clientName = filteredReports.isNotEmpty ? (filteredReports[0].nomcliente ?? '') : '';
-      return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey[200],
-                      child: Icon(
-                        Icons.location_on,
-                        color: Colors.green,
+              Material(
+                elevation: 0.5,
+                child: Container(
+                  margin: const EdgeInsets.all(10),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Buscar cliente',
+                      prefixIcon: Icon(Icons.search, color: Colors.grey),
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(color: Colors.grey, width: 0.5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(color: Colors.grey, width: 0.5),
                       ),
                     ),
-                    title: Text('${uniqueCUCs[index]}'), // Muestra el CUC único
-                    subtitle: Text(clientName), // Muestra el nombre del cliente correspondiente
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => DarwinDetailComponent(
-                            darwins: selectedReports,
-                            cuc: uniqueCUCs[index].toString(), // Convertimos el CUC a String para el título
-                          ),
-                        ),
-                      );
+                    onChanged: (value) {
+                      setState(() {}); 
                     },
-                  );
-                },
+                  ),
+                ),
               ),
-            ),
+              Expanded(
+                  child: ListView.builder(
+                    itemCount: uniqueCUCs.length,
+                    itemBuilder: (context, index) {
+                      // Aquí se aplica el filtro según el selectedCedis
+                      final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
+                        reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
+                        reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
+                        final filteredReports = selectedReports.where((report) {
+                        final cuc = report.cuc?.toString() ?? '';
+                        final nomcliente = report.nomcliente ?? '';
+                        final searchLower = _searchController.text.toLowerCase();
+                        return cuc.toLowerCase().contains(searchLower) || nomcliente.toLowerCase().contains(searchLower);
+                      }).toList();
+                      if (filteredReports.isEmpty) return SizedBox.shrink(); 
+                      final String clientName = filteredReports.isNotEmpty ? (filteredReports[0].nomcliente ?? '') : '';
+                      return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.grey[200],
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.green,
+                        ),
+                      ),
+                      title: Text('${uniqueCUCs[index]}'),
+                      subtitle: Text(clientName),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DarwinDetailComponent(
+                              darwins: selectedReports,
+                              cuc: uniqueCUCs[index].toString(),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
