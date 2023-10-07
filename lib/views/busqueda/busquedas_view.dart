@@ -36,6 +36,8 @@ class _BusquedasPageState extends State<BusquedasPage> {
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
   
+  bool isLoading = false;
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -49,6 +51,10 @@ class _BusquedasPageState extends State<BusquedasPage> {
   }
 
   void loadReportes(String? dateFilter) async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       if(dateFilter != null) {
         reportes = await BConnectService().getReportesByDate(dateFilter);
@@ -58,14 +64,16 @@ class _BusquedasPageState extends State<BusquedasPage> {
 
       uniqueCUCs = reportes.where((e) => e.cuc != null).map((e) => e.cuc!).toSet().toList();
       cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
-      
+        
       if (cedisList.isNotEmpty) {
         selectedCedis = 'Todos'; // Set to 'Todos'
       }
-
-      setState(() {});
     } catch (e) {
       print("Error loading data: $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -187,7 +195,9 @@ class _BusquedasPageState extends State<BusquedasPage> {
                 ),
               ),
               Expanded(
-                  child: ListView.builder(
+                child: isLoading 
+                ? Center(child: CircularProgressIndicator()) // mostrando loader
+                  : ListView.builder(
                     itemCount: uniqueCUCs.length,
                     itemBuilder: (context, index) {
                       // Aquí se aplica el filtro según el selectedCedis
