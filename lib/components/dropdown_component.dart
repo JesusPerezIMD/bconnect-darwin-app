@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return this.length > 0 ? '${this[0].toUpperCase()}${this.substring(1)}' : '';
+  }
+}
+
 class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({
     super.key,
@@ -57,7 +63,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
             items: widget.list!.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: Text(value),
+                child: Text(value.capitalize()), // Utiliza el método capitalize aquí
               );
             }).toList(),
           ),

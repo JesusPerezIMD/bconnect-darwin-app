@@ -35,6 +35,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
   String? selectedPeriod = 'todos'; // por defecto seleccionado
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
+  
 
   final TextEditingController _searchController = TextEditingController();
 
