@@ -25,7 +25,7 @@ class App extends StatelessWidget {
         Locale('es', 'es_mx'),
       ],
       theme: AppTheme.lightTheme,
-      title: 'BConnect Forms - Clientes',
+      title: 'BConnect Darwin - Busqueda',
       home: home ?? const LoginPage(),
       routes: AppRoute.getRoutes(),
     );
