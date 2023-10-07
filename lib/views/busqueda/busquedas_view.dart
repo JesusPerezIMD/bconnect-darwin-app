@@ -31,8 +31,8 @@ class _BusquedasPageState extends State<BusquedasPage> {
   
   List<String> cedisList = [];
   String? selectedCedis;
-  List<String> periodList = ['Todos', 'Semana', 'Hoy'];
-  String? selectedPeriod = 'Todos'; // por defecto seleccionado
+  List<String> periodList = ['todos', 'semana', 'hoy'];
+  String? selectedPeriod = 'todos'; // por defecto seleccionado
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
 
@@ -161,49 +161,55 @@ class _BusquedasPageState extends State<BusquedasPage> {
                 ],
               ),
               SizedBox(height: 10),
-            Material(
-              elevation: 0.5,
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                child: ListTile(
-                  dense: false,
-                  visualDensity: VisualDensity(vertical: -3.4),
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: -20),
-                  shape: const RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey, width: 0.5),
-                      borderRadius: BorderRadius.all(Radius.circular(20))),
-                  leading: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                      size: 24,
-                    ),
-                  ),
-                  horizontalTitleGap: 0,
-                  title: _searchController.text.isEmpty
-                      ? Text('Buscar cliente',
-                          style: TextStyle(fontSize: 16, color: Colors.grey))
-                      : Text(_searchController.text,
-                          style: TextStyle(fontSize: 16)),
-                  onTap: () {
-                    // Implement your search logic here
-                  },
-                ),
-              ),
-            ),
+Material(
+  elevation: 0.5,
+  child: Container(
+    margin: const EdgeInsets.all(10),
+    child: TextField(
+      controller: _searchController,
+      decoration: InputDecoration(
+        hintText: 'Buscar cliente',
+        prefixIcon: Icon(Icons.search, color: Colors.grey),
+        filled: true,
+        fillColor: Colors.white,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(color: Colors.grey, width: 0.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderSide: BorderSide(color: Colors.grey, width: 0.5),
+        ),
+      ),
+      onChanged: (value) {
+        // Este método será llamado cada vez que el texto cambie.
+        setState(() {}); // Esto reconstruirá el widget con los datos filtrados.
+      },
+    ),
+  ),
+),
+
             Expanded(
-              child: ListView.builder(
-                itemCount: uniqueCUCs.length,
-                itemBuilder: (context, index) {
-                  // Aquí se aplica el filtro según el selectedCedis
-                  final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
-                    reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
-                    reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
-                  if (selectedReports.isEmpty) return SizedBox.shrink(); 
-                  final String clientName = selectedReports.isNotEmpty ? (selectedReports[0].nomcliente ?? '') : '';
-                  return ListTile(
+  child: ListView.builder(
+    itemCount: uniqueCUCs.length,
+    itemBuilder: (context, index) {
+      // Aquí se aplica el filtro según el selectedCedis
+      final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
+        reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
+        reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
+
+      // Filtro adicional basado en la entrada de búsqueda
+      final filteredReports = selectedReports.where((report) {
+        final cuc = report.cuc?.toString() ?? '';
+        final nomcliente = report.nomcliente ?? '';
+        final searchLower = _searchController.text.toLowerCase();
+        return cuc.toLowerCase().contains(searchLower) || nomcliente.toLowerCase().contains(searchLower);
+      }).toList();
+
+      // Reemplaza selectedReports con filteredReports debajo
+      if (filteredReports.isEmpty) return SizedBox.shrink(); 
+      final String clientName = filteredReports.isNotEmpty ? (filteredReports[0].nomcliente ?? '') : '';
+      return ListTile(
                     leading: CircleAvatar(
                       backgroundColor: Colors.grey[200],
                       child: Icon(
