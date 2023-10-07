@@ -1,11 +1,11 @@
 {
-    "name": "BConnect - Darwin",
-    "short_name": "BConnect Darwin",
+    "name": "BConnect Darwin - Busqueda",
+    "short_name": "BConnect Darwin - Busqueda",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
     "theme_color": "#FFFFFF",
-    "description": "BConnect - Darwin",
+    "description": "BConnect Darwin - Busqueda",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
