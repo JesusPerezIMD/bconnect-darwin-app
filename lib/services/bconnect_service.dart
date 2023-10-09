@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 class BConnectService {
   String? token;
   String apiUrl = Environment().BCONNECT_API;
-  String apiBitacora = Environment().BITACORA_API;
   String apiReportes = Environment().GETREPORTES;
   String apiReportesByDate = Environment().GETREPORTESBYDATE;
 

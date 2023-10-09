@@ -226,47 +226,62 @@ class _BusquedasPageState extends State<BusquedasPage> {
                   ),
                 ),
               ),
-              Expanded(
-                child: isLoading 
-                ? Center(child: CircularProgressIndicator())
-                  : ListView.builder(
-                    itemCount: uniqueCUCs.length,
-                    itemBuilder: (context, index) {
-                      final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
-                        reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
-                        reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
-                        final filteredReports = selectedReports.where((report) {
-                        final cuc = report.cuc?.toString() ?? '';
-                        final nomcliente = report.nomcliente ?? '';
-                        final searchLower = _searchController.text.toLowerCase();
-                        return cuc.toLowerCase().contains(searchLower) || nomcliente.toLowerCase().contains(searchLower);
-                      }).toList();
-                      if (filteredReports.isEmpty) return SizedBox.shrink(); 
-                      final String clientName = filteredReports.isNotEmpty ? (filteredReports[0].nomcliente ?? '') : '';
-                      return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.grey[200],
-                        child: Icon(
-                          Icons.location_on,
-                          color: Colors.green,
-                        ),
-                      ),
-                      title: Text('${uniqueCUCs[index]}'),
-                      subtitle: Text(clientName),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => DarwinDetailComponent(
-                              darwins: selectedReports,
-                              cuc: uniqueCUCs[index].toString(),
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
+Expanded(
+  child: isLoading 
+    ? Center(child: CircularProgressIndicator())
+    : ListView.builder(
+        itemCount: uniqueCUCs.length,
+        itemBuilder: (context, index) {
+          final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
+            reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
+            reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
+            
+          final filteredReports = selectedReports.where((report) {
+            final cuc = report.cuc?.toString() ?? '';
+            final nomcliente = report.nomcliente ?? '';
+            final searchLower = _searchController.text.toLowerCase();
+            return cuc.toLowerCase().contains(searchLower) || nomcliente.toLowerCase().contains(searchLower);
+          }).toList();
+          
+          if (filteredReports.isEmpty) return SizedBox.shrink(); 
+          
+          final String clientName = filteredReports.isNotEmpty ? (filteredReports[0].nomcliente ?? '') : '';
+          final String cedis = filteredReports.isNotEmpty ? (filteredReports[0].cedis ?? '') : '';
+
+          return ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.grey[200],
+              child: Icon(
+                Icons.location_on,
+                color: Colors.green,
+                size: 20,
               ),
+            ),
+            title: Text('${uniqueCUCs[index]}', style: TextStyle(fontSize: 14)),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(clientName, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                Text(cedis, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+              ],
+            ),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DarwinDetailComponent(
+                    darwins: selectedReports,
+                    cuc: uniqueCUCs[index].toString(),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+),
+
+
+
             ],
           ),
         ),
