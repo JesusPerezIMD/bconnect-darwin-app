@@ -33,6 +33,7 @@ class Environment {
 
   final DEFAULT_LOCATION = const gm.LatLng(20.968147, -89.629872);
   //final SERVICE_ID = "8C3985E3-3B6A-4B0C-B7FD-DD3C4F197D37"; // Darwin
+  //final SERVICE_NAME = "SAV Darwin"; // Darwin
   final SERVICE_ID = "z593c9c6-b79f-4bf0-8ba2-fdb0a5345643"; //encuestas
   final SERVICE_NAME = "Encuestas";
 
