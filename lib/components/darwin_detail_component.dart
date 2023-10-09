@@ -32,7 +32,7 @@ Widget _buildRow(Icon icon, String title, String value) {
       children: [
         SizedBox(
           width: 40,
-          child: Center(  // Puedes usar Center o Align, dependiendo de la alineación exacta que desees.
+          child: Center(
             child: icon,
           ),
         ),

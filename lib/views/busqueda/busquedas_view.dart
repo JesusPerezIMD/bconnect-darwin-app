@@ -1,4 +1,3 @@
-// ignore_for_file: file_names
 import 'dart:convert';
 import 'package:bconnect_darwin_app/app_route.dart';
 import 'package:bconnect_darwin_app/app_theme.dart';
@@ -32,7 +31,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
   List<String> cedisList = [];
   String? selectedCedis;
   List<String> periodList = ['todos', 'semana', 'hoy'];
-  String? selectedPeriod = 'todos'; // por defecto seleccionado
+  String? selectedPeriod = 'todos';
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
   
@@ -66,7 +65,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
       cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
         
       if (cedisList.isNotEmpty) {
-        selectedCedis = 'Todos'; // Set to 'Todos'
+        selectedCedis = 'Todos';
       }
     } catch (e) {
       print("Error loading data: $e");
@@ -75,6 +74,17 @@ class _BusquedasPageState extends State<BusquedasPage> {
         isLoading = false;
       });
     }
+  }
+
+  DateTime? getLatestUpdate() {
+    DateTime? latest;
+    for (final report in reportes) {
+      final DateTime? current = report.createdOn;
+      if (current != null && (latest == null || current.isAfter(latest))) {
+        latest = current;
+      }
+    }
+    return latest;
   }
 
   @override
@@ -96,13 +106,36 @@ class _BusquedasPageState extends State<BusquedasPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), 
+            child: Card(
+              color: Colors.white,
+              elevation: 2, 
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), 
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween, 
+                  children: [
+                    Text(
+                      'Actualizado:',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      getLatestUpdate() != null ? DateFormat('dd/MM/yyyy').format(getLatestUpdate()!) : 'N/A',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5), 
             child: Container(
-              height: 50.0, // Altura ajustada del botón
+              height: 50.0, 
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Inserta la lógica para descargar el reporte
+                
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
@@ -111,13 +144,13 @@ class _BusquedasPageState extends State<BusquedasPage> {
                   'Descargar Reporte',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18.0, // Tamaño de fuente ajustado
+                    fontSize: 18.0, 
                   ),
                 ),
               ),
             ),
           ),
-          NavigationBarComponenet(0), // Configura tu NavigationBar
+          NavigationBarComponenet(0), 
         ],
       ),
       body: Padding(
@@ -140,7 +173,6 @@ class _BusquedasPageState extends State<BusquedasPage> {
                             setState(() {
                               selectedCedis = newValue;
                             });
-                            // Aquí puedes hacer otras operaciones que necesites realizar cuando selectedCedis cambie
                           }
                         },
                       ),
@@ -159,7 +191,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
                             setState(() {
                               selectedPeriod = newValue;
                             });
-                            loadReportes(newValue); // Load reportes with selected period
+                            loadReportes(newValue);
                           }
                         },
                       ),
@@ -196,11 +228,10 @@ class _BusquedasPageState extends State<BusquedasPage> {
               ),
               Expanded(
                 child: isLoading 
-                ? Center(child: CircularProgressIndicator()) // mostrando loader
+                ? Center(child: CircularProgressIndicator())
                   : ListView.builder(
                     itemCount: uniqueCUCs.length,
                     itemBuilder: (context, index) {
-                      // Aquí se aplica el filtro según el selectedCedis
                       final List<DarwinData> selectedReports = selectedCedis == 'Todos' ? 
                         reportes.where((r) => r.cuc == uniqueCUCs[index]).toList() :
                         reportes.where((r) => r.cuc == uniqueCUCs[index] && r.cedis == selectedCedis).toList();
