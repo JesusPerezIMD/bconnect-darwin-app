@@ -136,16 +136,17 @@ Widget _buildRow(Icon icon, String title, String value) {
             child: Padding(
               padding: EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Spacer(),  
                   ElevatedButton(
                     onPressed: () {
-
+                      
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
                     ),
-                    child: Padding(  // Padding para el texto dentro del botón
+                    child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                       child: Text('Descargar', style: TextStyle(color: Colors.white)),
                     ),
