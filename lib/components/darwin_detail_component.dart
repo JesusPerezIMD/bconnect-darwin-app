@@ -62,71 +62,101 @@ Widget _buildRow(Icon icon, String title, String value) {
       appBar: AppBar(
         title: Text('$cuc - ${darwins[0].nomcliente}'),
       ),
-      body: ListView(
-        children: groupedDarwins.entries.map((entry) {
-          final week = entry.key;
-          final weekDarwins = entry.value;
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildRow(const Icon(Icons.calendar_month, size: 20), 'Semana:', week),
-              CustomDividerComponent(text: 'Datos del Preventista'),
-              _buildRow(const Icon(Icons.info, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
-              _buildRow(const Icon(Icons.info, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
-              _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
-              CustomDividerComponent(text: 'Datos del Producto'),
-              Scrollbar(
-              child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 4.0),
-                    child: Row(
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              children: groupedDarwins.entries.map((entry) {
+                final week = entry.key;
+                final weekDarwins = entry.value;
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildRow(const Icon(Icons.calendar_month, size: 20), 'Semana:', week),
+                    CustomDividerComponent(text: 'Datos del Preventista'),
+                    _buildRow(const Icon(Icons.info, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
+                    _buildRow(const Icon(Icons.info, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
+                    _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
+                    CustomDividerComponent(text: 'Datos del Producto'),
+                    Scrollbar(
+                    child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
                       children: [
-                        Container(width: 300, child: Text('Producto', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 100, child: Text('Codigo', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 50, child: Text('Lun', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 50, child: Text('Mar', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 50, child: Text('Mie', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 50, child: Text('Jue', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 50, child: Text('Vie', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                        Container(width: 50, child: Text('Sab', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                      ],
-                    ),
-                  ),
-                  ...weekDarwins.map((darwin) => 
-                    Row(
-                      children: [
-                        Container(
-                          width: 300,
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4.0),
                           child: Row(
                             children: [
-                              Icon(Icons.label, color: Colors.black, size: 20),
-                              SizedBox(width: 4),
-                              Text('${darwin.producto}', style: TextStyle(fontSize: 14, color: Colors.black)),
+                              Container(width: 300, child: Text('Producto', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 100, child: Text('Codigo', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 50, child: Text('Lun', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 50, child: Text('Mar', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 50, child: Text('Mie', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 50, child: Text('Jue', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 50, child: Text('Vie', style: TextStyle(fontSize: 12, color: Colors.grey))),
+                              Container(width: 50, child: Text('Sab', style: TextStyle(fontSize: 12, color: Colors.grey))),
                             ],
                           ),
                         ),
-                        Container(width: 100, child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                        Container(width: 50, child: Text('${darwin.lun}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                        Container(width: 50, child: Text('${darwin.mar}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                        Container(width: 50, child: Text('${darwin.mie}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                        Container(width: 50, child: Text('${darwin.jue}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                        Container(width: 50, child: Text('${darwin.vie}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                        Container(width: 50, child: Text('${darwin.sab}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                        ...weekDarwins.map((darwin) => 
+                          Row(
+                            children: [
+                              Container(
+                                width: 300,
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.label, color: Colors.black, size: 20),
+                                    SizedBox(width: 4),
+                                    Text('${darwin.producto}', style: TextStyle(fontSize: 14, color: Colors.black)),
+                                  ],
+                                ),
+                              ),
+                              Container(width: 100, child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                              Container(width: 50, child: Text('${darwin.lun}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                              Container(width: 50, child: Text('${darwin.mar}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                              Container(width: 50, child: Text('${darwin.mie}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                              Container(width: 50, child: Text('${darwin.jue}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                              Container(width: 50, child: Text('${darwin.vie}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                              Container(width: 50, child: Text('${darwin.sab}', style: TextStyle(fontSize: 14, color: Colors.black))),
+                            ],
+                          )
+                        ).toList(),
                       ],
-                    )
-                  ).toList(),
+                    ),
+                  ),
+                  ),
+                    SizedBox(height: 16),
+                  ],
+                );
+              }).toList(),
+            ),
+          ),
+          Card(
+            margin: EdgeInsets.all(0.0),
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
+                    ),
+                    child: Padding(  // Padding para el texto dentro del botón
+                      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                      child: Text('Descargar', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
                 ],
               ),
             ),
-            ),
-              SizedBox(height: 16),
-            ],
-          );
-        }).toList(),
+          ),
+        ],
       ),
     );
   }
+
 }
