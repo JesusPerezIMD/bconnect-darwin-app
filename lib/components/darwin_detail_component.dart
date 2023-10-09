@@ -57,6 +57,7 @@ Widget _buildRow(Icon icon, String title, String value) {
   @override
   Widget build(BuildContext context) {
     final groupedDarwins = groupByWeek(darwins);
+    final ScrollController _scrollController = ScrollController();
 
     return Scaffold(
       appBar: AppBar(
@@ -79,8 +80,10 @@ Widget _buildRow(Icon icon, String title, String value) {
                     _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
                     CustomDividerComponent(text: 'Datos del Producto'),
                     Scrollbar(
+                    controller: _scrollController,
                     child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
+                    controller: _scrollController,
                     child: Column(
                       children: [
                         Padding(
