@@ -102,23 +102,18 @@ class BConnectService {
     }
   }
 
-  Future<List<DarwinData>> GetReportesByCreated(String codcliente, String date) async {
+  Future<String?> GetReportesByCreated(String cedis, String cuc, String date) async {
     try {
-      List<DarwinData> reportes = [];
       final response = await http.get(
-        Uri.parse("$apiReportesByCreated/$codcliente/$date"),
-        headers: {
-        }
+        Uri.parse("$apiReportesByCreated/$cedis/$cuc/$date"),
+        headers: {},
       );
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
-        for (var data in result) {
-          reportes.add(DarwinData.fromJson(data));
-        }
+        return DarwinData.fromJson(result).urlDescarga;
       } else {
         throw Exception('Failed to load reportes by date, status code: ${response.statusCode}');
       }
-      return reportes;
     } catch (e) {
       print('Error loading reportes by date: $e');
       throw e;

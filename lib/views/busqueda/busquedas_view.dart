@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:bconnect_darwin_app/app_route.dart';
 import 'package:bconnect_darwin_app/app_theme.dart';
 import 'package:bconnect_darwin_app/env.dart';
@@ -34,6 +35,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
   String? selectedPeriod = 'todos';
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
+  String? selectedCuc;
   
   bool isLoading = false;
 
@@ -129,8 +131,25 @@ class _BusquedasPageState extends State<BusquedasPage> {
               height: 50.0, 
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                
+                onPressed: () async {
+                  try {
+                    String? urlDescarga = await BConnectService().GetReportesByCreated(
+                      selectedCedis ?? 'todos',
+                      selectedCuc ?? 'todos',
+                      selectedPeriod ?? 'todos'
+                    );
+
+                    if (urlDescarga != null) {
+                      if (await canLaunch(urlDescarga)) {
+                        await launch(urlDescarga);
+                      } else {
+                        throw 'No se pudo lanzar $urlDescarga';
+                      }
+                    }
+                    
+                  } catch (e) {
+                    print('Error al descargar reportes: $e');
+                  }
                 },
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),

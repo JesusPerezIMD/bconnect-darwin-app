@@ -1,4 +1,5 @@
 class DarwinData {
+  String? urlDescarga;
   String? idTask;
   String? darwinDataId;
   int? ptovta;
@@ -21,6 +22,7 @@ class DarwinData {
   DateTime? createdOn;
 
   DarwinData({
+    this.urlDescarga,
     this.idTask,
     this.darwinDataId,
     this.ptovta,
@@ -44,6 +46,7 @@ class DarwinData {
   });
 
   DarwinData.fromJson(Map<String, dynamic> json) {
+    urlDescarga = json['url'] ?? '';
     idTask = json['idTask'] ?? '';
     darwinDataId = json['darwinDataId'] ?? '';
     ptovta = json['ptovta'] ?? 0;
@@ -65,5 +68,6 @@ class DarwinData {
     codemp = json['codemp'] ?? 0;
     createdOn = json['createdOn'] != null ? DateTime.parse(json['createdOn']) : null;
   }
+  
 
 }
