@@ -42,25 +42,20 @@ class _BusquedasPageState extends State<BusquedasPage> {
   @override
   void initState() {
     super.initState();
-    loadReportes(null);
+    loadReportes('todos');
     cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
     if (cedisList.isNotEmpty) {
       selectedCedis = cedisList.first; 
     }
   }
 
-  void loadReportes(String? dateFilter) async {
+  void loadReportes(String dateFilter) async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      if(dateFilter != null) {
-        reportes = await BConnectService().getReportesByDate(dateFilter);
-      } else {
-        reportes = await BConnectService().getReportes();
-      }
-
+      reportes = await BConnectService().getReportesByDate(dateFilter);
       uniqueCUCs = reportes.where((e) => e.cuc != null).map((e) => e.cuc!).toSet().toList();
       cedisList = ['Todos']..addAll(reportes.map((e) => e.cedis ?? '').toSet().toList());
         
