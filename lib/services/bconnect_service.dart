@@ -102,7 +102,7 @@ class BConnectService {
     }
   }
 
-    Future<List<DarwinData>> GetReportesByCreated(String codcliente, String date) async {
+  Future<List<DarwinData>> GetReportesByCreated(String codcliente, String date) async {
     try {
       List<DarwinData> reportes = [];
       final response = await http.get(
