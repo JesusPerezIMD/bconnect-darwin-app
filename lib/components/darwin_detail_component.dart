@@ -54,6 +54,25 @@ Widget _buildRow(Icon icon, String title, String value) {
   );
 }
 
+  Widget _buildPreventistaData(List<DarwinData> weekDarwins) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        bool isWide = constraints.maxWidth > 725;
+        List<Widget> dataWidgets = [
+          _buildRow(const Icon(Icons.info, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
+          _buildRow(const Icon(Icons.info, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
+          _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
+        ];
+        return Column(
+          children: [
+            CustomDividerComponent(text: 'Datos del Preventista'),
+            isWide ? Row(children: dataWidgets.map((widget) => Expanded(child: widget)).toList()) : Column(children: dataWidgets),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final groupedDarwins = groupByWeek(darwins);
@@ -65,6 +84,7 @@ Widget _buildRow(Icon icon, String title, String value) {
       ),
       body: Column(
         children: [
+          if (darwins.isNotEmpty) _buildPreventistaData(darwins),
           Expanded(
             child: ListView(
               children: groupedDarwins.entries.map((entry) {
@@ -73,61 +93,95 @@ Widget _buildRow(Icon icon, String title, String value) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    CustomDividerComponent(text: 'Fecha'),
                     _buildRow(const Icon(Icons.calendar_month, size: 20), 'Semana:', week),
-                    CustomDividerComponent(text: 'Datos del Preventista'),
-                    _buildRow(const Icon(Icons.info, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
-                    _buildRow(const Icon(Icons.info, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
-                    _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
                     CustomDividerComponent(text: 'Datos del Producto'),
-                    Scrollbar(
-                    controller: _scrollController,
-                    child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    controller: _scrollController,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 4.0),
-                          child: Row(
-                            children: [
-                              Container(width: 300, child: Text('Producto', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 100, child: Text('Codigo', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 50, child: Text('Lun', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 50, child: Text('Mar', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 50, child: Text('Mie', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 50, child: Text('Jue', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 50, child: Text('Vie', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                              Container(width: 50, child: Text('Sab', style: TextStyle(fontSize: 12, color: Colors.grey))),
-                            ],
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      bool isWide = constraints.maxWidth > 725;
+                      return Scrollbar(
+                        controller: _scrollController,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: isWide ? constraints.maxWidth : 0,
+                            ),
+                            child: IntrinsicWidth(
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 4.0),
+                                    child: Row(
+                                      children: [
+                                        isWide ? Expanded(child: Center(child: Text('Producto', style: TextStyle(fontSize: 12, color: Colors.grey))))
+                                              : Container(width: 300, child: Center(child: Text('Producto', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Codigo', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 100, child: Center(child: Text('Codigo', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Lun', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 50, child: Center(child: Text('Lun', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Mar', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 50, child: Center(child: Text('Mar', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Mie', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 50, child: Center(child: Text('Mie', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Jue', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 50, child: Center(child: Text('Jue', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Vie', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 50, child: Center(child: Text('Vie', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                        isWide ? Expanded(child: Center(child: Text('Sab', style: TextStyle(fontSize: 12, color: Colors.grey)))) 
+                                              : Container(width: 50, child: Center(child: Text('Sab', style: TextStyle(fontSize: 12, color: Colors.grey)))),
+                                      ],
+                                    ),
+                                  ),
+                                  ...weekDarwins.map((darwin) =>
+                                    Row(
+                                      children: [
+                                        isWide  ? Expanded(
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.label, color: Colors.black, size: 20),
+                                                SizedBox(width: 4),
+                                                Text('${darwin.producto}', style: TextStyle(fontSize: 14, color: Colors.black)),
+                                              ],
+                                            ),
+                                          )
+                                          : Container(
+                                            width: 300, 
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.label, color: Colors.black, size: 20),
+                                                SizedBox(width: 4),
+                                                Text('${darwin.producto}', style: TextStyle(fontSize: 14, color: Colors.black)),
+                                              ],
+                                            ),
+                                          ),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 100, child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 50, child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 50, child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 50, child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 50, child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 50, child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                        isWide ? Expanded(child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 14, color: Colors.black)))) 
+                                              : Container(width: 50, child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 14, color: Colors.black)))),
+                                      ],
+                                    )
+                                  ).toList(),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        ...weekDarwins.map((darwin) => 
-                          Row(
-                            children: [
-                              Container(
-                                width: 300,
-                                child: Row(
-                                  children: [
-                                    Icon(Icons.label, color: Colors.black, size: 20),
-                                    SizedBox(width: 4),
-                                    Text('${darwin.producto}', style: TextStyle(fontSize: 14, color: Colors.black)),
-                                  ],
-                                ),
-                              ),
-                              Container(width: 100, child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                              Container(width: 50, child: Text('${darwin.lun}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                              Container(width: 50, child: Text('${darwin.mar}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                              Container(width: 50, child: Text('${darwin.mie}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                              Container(width: 50, child: Text('${darwin.jue}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                              Container(width: 50, child: Text('${darwin.vie}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                              Container(width: 50, child: Text('${darwin.sab}', style: TextStyle(fontSize: 14, color: Colors.black))),
-                            ],
-                          )
-                        ).toList(),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                  ),
+
                     SizedBox(height: 16),
                   ],
                 );
