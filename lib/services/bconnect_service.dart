@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class BConnectService {
   String? token;
   String apiUrl = Environment().BCONNECT_API;
-  String apiReportes = Environment().GETREPORTES;
+  String apiReportesByCreated = Environment().GETREPORTESBYCREATED;
   String apiReportesByDate = Environment().GETREPORTESBYDATE;
 
   BConnectService();
@@ -102,27 +102,50 @@ class BConnectService {
     }
   }
 
-  Future<List<DarwinData>> getReportesByDate(String date) async {
-  try {
-    List<DarwinData> reportes = [];
-    final response = await http.get(
-      Uri.parse("$apiReportesByDate/$date"),
-      headers: {
+    Future<List<DarwinData>> GetReportesByCreated(String codcliente, String date) async {
+    try {
+      List<DarwinData> reportes = [];
+      final response = await http.get(
+        Uri.parse("$apiReportesByCreated/$codcliente/$date"),
+        headers: {
+        }
+      );
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        for (var data in result) {
+          reportes.add(DarwinData.fromJson(data));
+        }
+      } else {
+        throw Exception('Failed to load reportes by date, status code: ${response.statusCode}');
       }
-    );
-    if (response.statusCode == 200) {
-      final result = jsonDecode(response.body);
-      for (var data in result) {
-        reportes.add(DarwinData.fromJson(data));
-      }
-    } else {
-      throw Exception('Failed to load reportes by date, status code: ${response.statusCode}');
+      return reportes;
+    } catch (e) {
+      print('Error loading reportes by date: $e');
+      throw e;
     }
-    return reportes;
-  } catch (e) {
-    print('Error loading reportes by date: $e');
-    throw e;
   }
-}
+
+  Future<List<DarwinData>> getReportesByDate(String date) async {
+    try {
+      List<DarwinData> reportes = [];
+      final response = await http.get(
+        Uri.parse("$apiReportesByDate/$date"),
+        headers: {
+        }
+      );
+      if (response.statusCode == 200) {
+        final result = jsonDecode(response.body);
+        for (var data in result) {
+          reportes.add(DarwinData.fromJson(data));
+        }
+      } else {
+        throw Exception('Failed to load reportes by date, status code: ${response.statusCode}');
+      }
+      return reportes;
+    } catch (e) {
+      print('Error loading reportes by date: $e');
+      throw e;
+    }
+  }
 
 }
