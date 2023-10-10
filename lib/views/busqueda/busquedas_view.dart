@@ -284,7 +284,9 @@ class _BusquedasPageState extends State<BusquedasPage> {
                               MaterialPageRoute(
                                 builder: (context) => DarwinDetailComponent(
                                   darwins: selectedReports,
+                                  cedis: selectedCedis ?? 'todos',
                                   cuc: uniqueCUCs[index].toString(),
+                                  periodo: selectedPeriod ?? 'todos',
                                 ),
                               ),
                             );

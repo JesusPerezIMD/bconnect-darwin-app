@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/models.dart';
 import '../../components/components.dart';
+import '../../services/services.dart';
 
 Map<String, List<DarwinData>> groupByWeek(List<DarwinData> darwins) {
   Map<String, List<DarwinData>> map = {};
@@ -17,12 +19,16 @@ Map<String, List<DarwinData>> groupByWeek(List<DarwinData> darwins) {
 
 class DarwinDetailComponent extends StatelessWidget {
   final List<DarwinData> darwins;
+  final String cedis;
   final String cuc;
+  final String periodo;
 
   const DarwinDetailComponent({
       Key? key, 
-      required this.darwins, 
-      required this.cuc
+      required this.darwins,
+      required this.cedis, 
+      required this.cuc,
+      required this.periodo,
   }) : super(key: key);
 
 Widget _buildRow(Icon icon, String title, String value) {
@@ -199,8 +205,25 @@ Widget _buildRow(Icon icon, String title, String value) {
                 children: [
                   Spacer(),  
                   ElevatedButton(
-                    onPressed: () {
-                      
+                    onPressed: () async {
+                      try {
+                        String? urlDescarga = await BConnectService().GetReportesByCreated(
+                          cedis,
+                          cuc,
+                          periodo
+                        );
+
+                        if (urlDescarga != null) {
+                          if (await canLaunch(urlDescarga)) {
+                            await launch(urlDescarga);
+                          } else {
+                            throw 'No se pudo lanzar $urlDescarga';
+                          }
+                        }
+                        
+                      } catch (e) {
+                        print('Error al descargar reportes: $e');
+                      }    
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.deepOrangeAccent),
