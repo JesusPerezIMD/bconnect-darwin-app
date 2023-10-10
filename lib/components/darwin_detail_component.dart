@@ -77,6 +77,7 @@ Widget _buildRow(Icon icon, String title, String value) {
   Widget build(BuildContext context) {
     final groupedDarwins = groupByWeek(darwins);
     final ScrollController _scrollController = ScrollController();
+    final ScrollController _horizontalScrollController = ScrollController();
 
     return Scaffold(
       appBar: AppBar(
@@ -103,7 +104,7 @@ Widget _buildRow(Icon icon, String title, String value) {
                         controller: _scrollController,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          controller: _scrollController,
+                          controller: _horizontalScrollController,
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
                               minWidth: isWide ? constraints.maxWidth : 0,
