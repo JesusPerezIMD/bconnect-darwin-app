@@ -102,8 +102,6 @@ class BConnectService {
     }
   }
 
-
-
   Future<List<DarwinData>> getReportesByDate(String date) async {
   try {
     List<DarwinData> reportes = [];
@@ -126,6 +124,5 @@ class BConnectService {
     throw e;
   }
 }
-
 
 }
