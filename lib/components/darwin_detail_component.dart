@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/models.dart';
 import '../../components/components.dart';
 
@@ -59,9 +60,9 @@ Widget _buildRow(Icon icon, String title, String value) {
       builder: (context, constraints) {
         bool isWide = constraints.maxWidth > 725;
         List<Widget> dataWidgets = [
-          _buildRow(const Icon(Icons.info, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
-          _buildRow(const Icon(Icons.info, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
-          _buildRow(const Icon(Icons.info, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
+          _buildRow(Icon(FontAwesomeIcons.bars, size: 20), 'Código Preventista:', weekDarwins[0].codPreventa?.toString() ?? ''),
+          _buildRow(const Icon(Icons.person, size: 20), 'Nombre Preventista:', weekDarwins[0].nombrePreventa?.toString() ?? ''),
+          _buildRow(const Icon(FontAwesomeIcons.industry, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
         ];
         return Column(
           children: [
