@@ -31,8 +31,8 @@ class _BusquedasPageState extends State<BusquedasPage> {
   
   List<String> cedisList = [];
   String? selectedCedis;
-  List<String> periodList = ['todos', 'semana', 'hoy'];
-  String? selectedPeriod = 'todos';
+  List<String> periodList = ['semana', 'hoy'];
+  String? selectedPeriod = 'semana';
   List<DarwinData> reportes = [];
   List<int> uniqueCUCs = [];
   String? selectedCuc;

@@ -32,41 +32,44 @@ class DarwinDetailComponent extends StatelessWidget {
       required this.periodo,
   }) : super(key: key);
 
-Widget _buildRow(Icon icon, String title, String value) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 40,
-          child: Center(
-            child: icon,
-          ),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-            Text(
-              value,
-              style: TextStyle(fontSize: 18, color: Colors.black),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
 
+  Widget _buildRow(Icon icon, String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 40,
+            child: Center(
+              child: icon,
+            ),
+          ),
+          Expanded( // Añadido Expanded para permitir a la Column ocupar el espacio restante en la fila
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+                Text(
+                  value,
+                  style: TextStyle(fontSize: 18, color: Colors.black),
+                  overflow: TextOverflow.visible, // Cambiado a 'visible' para permitir visualizar el texto overflow
+                  softWrap: true, // Asegura que el texto se envuelve y cae a una nueva línea en lugar de desbordar.
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildPreventistaData(List<DarwinData> weekDarwins) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        bool isWide = constraints.maxWidth > 725;
         String preventistaData = "${weekDarwins[0].codPreventa?.toString() ?? ''} - ${weekDarwins[0].nombrePreventa?.toString() ?? ''}";
         List<Widget> dataWidgets = [
           _buildRow(const Icon(Icons.person, size: 30), 'Código Preventista y Nombre:', preventistaData),
@@ -75,12 +78,13 @@ Widget _buildRow(Icon icon, String title, String value) {
         return Column(
           children: [
             CustomDividerComponent(text: 'Colaborador'),
-            isWide ? Row(children: dataWidgets.map((widget) => Expanded(child: widget)).toList()) : Column(children: dataWidgets),
+            Column(children: dataWidgets),
           ],
         );
       },
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +115,7 @@ Widget _buildRow(Icon icon, String title, String value) {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomDividerComponent(text: 'Semana'),
-                    _buildRow(const Icon(Icons.calendar_month, size: 20), 'Semana:', week),
+                    _buildRow(const Icon(Icons.calendar_month, size: 30), 'Semana:', week),
                     CustomDividerComponent(text: 'Datos del Producto'),
                     Scrollbar(
                       controller: _scrollController,
