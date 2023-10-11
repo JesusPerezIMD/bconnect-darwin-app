@@ -14,7 +14,7 @@ class CustomDividerComponent extends StatelessWidget {
           const Expanded(
             child: Divider(
               color: Colors.grey,
-              height: 1,
+              height: 2,
             ),
           ),
           Padding(
@@ -24,13 +24,13 @@ class CustomDividerComponent extends StatelessWidget {
               style: const TextStyle(
                   color: Colors.grey,
                   fontWeight: FontWeight.bold,
-                  fontSize: 10),
+                  fontSize: 12),
             ),
           ),
           const Expanded(
             child: Divider(
               color: Colors.grey,
-              height: 1,
+              height: 2,
             ),
           ),
         ],

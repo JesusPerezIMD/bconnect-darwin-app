@@ -215,9 +215,9 @@ class _BusquedasPageState extends State<BusquedasPage> {
               ),
               SizedBox(height: 10),
               Material(
-                elevation: 0.5,
+                elevation: 0.0,
                 child: Container(
-                  margin: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.fromLTRB(8, 8, 8, 16),
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
@@ -271,12 +271,12 @@ class _BusquedasPageState extends State<BusquedasPage> {
                               size: 20,
                             ),
                           ),
-                          title: Text('${uniqueCUCs[index]}', style: TextStyle(fontSize: 14)),
+                          title: Text('${uniqueCUCs[index]}', style: TextStyle(fontSize: 16)),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(clientName, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                              Text(cedis, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                              Text(clientName, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                              Text(cedis, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                             ],
                           ),
                           onTap: () {
