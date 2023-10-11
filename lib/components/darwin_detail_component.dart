@@ -103,6 +103,12 @@ Widget _buildRow(Icon icon, String title, String value) {
               children: groupedDarwins.entries.map((entry) {
                 final week = entry.key;
                 final weekDarwins = entry.value;
+                bool showLun = weekDarwins.any((darwin) => darwin.lun != 0);
+                bool showMar = weekDarwins.any((darwin) => darwin.mar != 0);
+                bool showMie = weekDarwins.any((darwin) => darwin.mie != 0);
+                bool showJue = weekDarwins.any((darwin) => darwin.jue != 0);
+                bool showVie = weekDarwins.any((darwin) => darwin.vie != 0);
+                bool showSab = weekDarwins.any((darwin) => darwin.sab != 0);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -128,21 +134,26 @@ Widget _buildRow(Icon icon, String title, String value) {
                                     padding: const EdgeInsets.symmetric(vertical: 8),
                                     child: Row(
                                       children: [
-                                        isWide ? Expanded(child: Center(child: Text('Codigo', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
-                                              : Container(width: 75, child: Center(child: Text('Codigo', style: TextStyle(fontSize: 14, color: Colors.grey)))),
-                                        isWide ? Expanded(child: Center(child: Text('Lun', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
-                                              : Container(width: 50, child: Center(child: Text('Lun', style: TextStyle(fontSize: 14, color: Colors.grey)))),
-                                        isWide ? Expanded(child: Center(child: Text('Mar', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
-                                              : Container(width: 50, child: Center(child: Text('Mar', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                      isWide ? Expanded(child: Center(child: Text('Codigo', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
+                                            : Container(width: 75, child: Center(child: Text('Codigo', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                      if (showMar)
+                                      isWide ? Expanded(child: Center(child: Text('Mar', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
+                                            : Container(width: 50, child: Center(child: Text('Mar', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                      if (showMie)
                                         isWide ? Expanded(child: Center(child: Text('Mie', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
                                               : Container(width: 50, child: Center(child: Text('Mie', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                      if (showJue)
                                         isWide ? Expanded(child: Center(child: Text('Jue', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
                                               : Container(width: 50, child: Center(child: Text('Jue', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                      if (showVie)
                                         isWide ? Expanded(child: Center(child: Text('Vie', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
                                               : Container(width: 50, child: Center(child: Text('Vie', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                      if (showSab)
                                         isWide ? Expanded(child: Center(child: Text('Sab', style: TextStyle(fontSize: 14, color: Colors.grey)))) 
                                               : Container(width: 50, child: Center(child: Text('Sab', style: TextStyle(fontSize: 14, color: Colors.grey)))),
-                                      ],
+                                    isWide ? Expanded(child: Center(child: Text('Total', style: TextStyle(fontSize: 14, color: Colors.grey))))
+                                           : Container(width: 50, child: Center(child: Text('Total', style: TextStyle(fontSize: 14, color: Colors.grey)))),
+                                     ],
                                     ),
                                     ),
                                     ...weekDarwins.asMap().entries.map((entry) {
@@ -186,19 +197,30 @@ Widget _buildRow(Icon icon, String title, String value) {
                                                 children: [
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 75, child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                if (showLun)
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 50, child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                if (showMar)
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 50, child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                if (showMie)
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 50, child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                if (showJue)
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 50, child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                if (showVie)
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 50, child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                if (showSab)
                                                   isWide ? Expanded(child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
                                                         : Container(width: 50, child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                                ],
+                                              isWide ? Expanded(child: Center(child: Text('${(darwin.lun ?? 0) + (darwin.mar ?? 0) + (darwin.mie ?? 0) + (darwin.jue ?? 0) + (darwin.vie ?? 0) + (darwin.sab ?? 0)}', style: TextStyle(fontSize: 16, color: Colors.black),),),) 
+                                                     : Container(width: 50,  child: Center( child: Text('${(darwin.lun ?? 0) + (darwin.mar ?? 0) + (darwin.mie ?? 0) + (darwin.jue ?? 0) + (darwin.vie ?? 0) + (darwin.sab ?? 0)}',style: TextStyle(fontSize: 16, color: Colors.black),
+                                                  ),
+                                                ),
+                                              ),
+                                              ],
                                               ),
                                             ),
                                           );
