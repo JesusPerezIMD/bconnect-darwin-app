@@ -145,8 +145,11 @@ Widget _buildRow(Icon icon, String title, String value) {
                                       ],
                                     ),
                                     ),
-                                    ...weekDarwins.map((darwin) =>
-                                      ValueListenableBuilder<String>(
+                                    ...weekDarwins.asMap().entries.map((entry) {
+                                      int idx = entry.key;
+                                      var darwin = entry.value;
+                                      Color bgColor = idx.isEven ? Colors.white : (Colors.grey[400] ?? Colors.white); 
+                                      return ValueListenableBuilder<String>(
                                         valueListenable: selectedRowNotifier,
                                         builder: (context, selectedRow, child) {
                                           return GestureDetector(
@@ -178,30 +181,30 @@ Widget _buildRow(Icon icon, String title, String value) {
                                               ).whenComplete(() => selectedRowNotifier.value = ''); // Resetea el valor después de cerrar el modal
                                             },
                                             child: Container(
-                                              color: selectedRow == darwin.codProDarwin.toString() ? Colors.grey : Colors.transparent,
+                                              color: selectedRow == darwin.codProDarwin.toString() ? Colors.grey : bgColor, // Se usa bgColor aquí
                                               child: Row(
                                                 children: [
-                                                      isWide ? Expanded(child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 75, child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                        isWide ? Expanded(child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 50, child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                        isWide ? Expanded(child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 50, child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                        isWide ? Expanded(child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 50, child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                        isWide ? Expanded(child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 50, child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                        isWide ? Expanded(child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 50, child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                        isWide ? Expanded(child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
-                                              : Container(width: 50, child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 16, color: Colors.black)))),
-                                              ],
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 75, child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 50, child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 50, child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 50, child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 50, child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 50, child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                  isWide ? Expanded(child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 16, color: Colors.black)))) 
+                                                        : Container(width: 50, child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 16, color: Colors.black)))),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  ).toList(),
+                                          );
+                                        },
+                                      );
+                                    }).toList(),
                                 ],
                               ),
                             ),
@@ -210,7 +213,6 @@ Widget _buildRow(Icon icon, String title, String value) {
                       );
                     },
                   ),
-
                     SizedBox(height: 16),
                   ],
                 );
