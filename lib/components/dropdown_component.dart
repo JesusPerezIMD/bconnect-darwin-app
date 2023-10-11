@@ -36,7 +36,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
             Text(
               widget.label!,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: Colors.grey[600],
                 fontWeight: FontWeight.normal,
               ),

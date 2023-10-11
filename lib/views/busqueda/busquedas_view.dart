@@ -198,7 +198,7 @@ class _BusquedasPageState extends State<BusquedasPage> {
                       padding: const EdgeInsets.all(5),
                       child: DropdownButtonExample(
                         value: selectedPeriod,
-                        label: "Periodo",
+                        label: "Mostrar",
                         list: periodList,
                         onChanged: (String? newValue) {
                           if (newValue != null && newValue.isNotEmpty) {
@@ -271,11 +271,11 @@ class _BusquedasPageState extends State<BusquedasPage> {
                               size: 20,
                             ),
                           ),
-                          title: Text('${uniqueCUCs[index]}', style: TextStyle(fontSize: 16)),
+                          title: Text('${uniqueCUCs[index]}', style: TextStyle(fontSize: 18)),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(clientName, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+                              Text(clientName, style: TextStyle(fontSize: 16, color: Colors.grey[600])),
                               Text(cedis, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
                             ],
                           ),

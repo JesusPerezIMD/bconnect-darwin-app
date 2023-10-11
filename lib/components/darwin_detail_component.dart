@@ -49,11 +49,11 @@ Widget _buildRow(Icon icon, String title, String value) {
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
             ),
             Text(
               value,
-              style: TextStyle(fontSize: 16, color: Colors.black),
+              style: TextStyle(fontSize: 18, color: Colors.black),
             ),
           ],
         ),
@@ -69,8 +69,8 @@ Widget _buildRow(Icon icon, String title, String value) {
         bool isWide = constraints.maxWidth > 725;
         String preventistaData = "${weekDarwins[0].codPreventa?.toString() ?? ''} - ${weekDarwins[0].nombrePreventa?.toString() ?? ''}";
         List<Widget> dataWidgets = [
-          _buildRow(const Icon(Icons.person, size: 20), 'Código Preventista y Nombre:', preventistaData),
-          _buildRow(const Icon(FontAwesomeIcons.industry, size: 20), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
+          _buildRow(const Icon(Icons.person, size: 30), 'Código Preventista y Nombre:', preventistaData),
+          _buildRow(const Icon(FontAwesomeIcons.industry, size: 30), 'Cedis:', weekDarwins[0].cedis?.toString() ?? ''),
         ];
         return Column(
           children: [
@@ -88,8 +88,6 @@ Widget _buildRow(Icon icon, String title, String value) {
     final ScrollController _scrollController = ScrollController();
     final ScrollController _horizontalScrollController = ScrollController();
     final selectedRowNotifier = ValueNotifier<String>('');
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -115,126 +113,92 @@ Widget _buildRow(Icon icon, String title, String value) {
                     CustomDividerComponent(text: 'Semana'),
                     _buildRow(const Icon(Icons.calendar_month, size: 20), 'Semana:', week),
                     CustomDividerComponent(text: 'Datos del Producto'),
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      bool isWide = constraints.maxWidth > 100;
-                      return Scrollbar(
-                        controller: _scrollController,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          controller: _horizontalScrollController,
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minWidth: isWide ? constraints.maxWidth : 0,
-                            ),
-                            child: IntrinsicWidth(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8),
-                                    child: Row(
-                                      children: [
-                                        isWide ? Expanded(child: Center(child: Text('Codigo', style: TextStyle(fontSize: 16, color: Colors.grey)))) 
-                                               : Container(width: 75, child: Center(child: Text('Codigo', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                      if (showMar)
-                                        isWide ? Expanded(child: Center(child: Text('Mar', style: TextStyle(fontSize: 16, color: Colors.grey)))) 
-                                               : Container(width: 50, child: Center(child: Text('Mar', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                      if (showMie)
-                                        isWide ? Expanded(child: Center(child: Text('Mie', style: TextStyle(fontSize: 16, color: Colors.grey)))) 
-                                               : Container(width: 50, child: Center(child: Text('Mie', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                      if (showJue)
-                                        isWide ? Expanded(child: Center(child: Text('Jue', style: TextStyle(fontSize: 16, color: Colors.grey)))) 
-                                               : Container(width: 50, child: Center(child: Text('Jue', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                      if (showVie)
-                                        isWide ? Expanded(child: Center(child: Text('Vie', style: TextStyle(fontSize: 16, color: Colors.grey)))) 
-                                               : Container(width: 50, child: Center(child: Text('Vie', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                      if (showSab)
-                                        isWide ? Expanded(child: Center(child: Text('Sab', style: TextStyle(fontSize: 16, color: Colors.grey)))) 
-                                               : Container(width: 50, child: Center(child: Text('Sab', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                    isWide ? Expanded(child: Center(child: Text('Total', style: TextStyle(fontSize: 16, color: Colors.grey))))
-                                           : Container(width: 50, child: Center(child: Text('Total', style: TextStyle(fontSize: 16, color: Colors.grey)))),
-                                     ],
-                                    ),
-                                    ),
-                                    ...weekDarwins.asMap().entries.map((entry) {
-                                      int idx = entry.key;
-                                      var darwin = entry.value;
-                                      Color bgColor = idx.isEven ? Colors.white : (Colors.grey[300] ?? Colors.white); 
-                                      return ValueListenableBuilder<String>(
-                                        valueListenable: selectedRowNotifier,
-                                        builder: (context, selectedRow, child) {
-                                          return GestureDetector(
-                                            onTap: () {
-                                              selectedRowNotifier.value = darwin.codProDarwin.toString();
-                                              showModalBottomSheet(
-                                                isScrollControlled: true,
-                                                context: context,
-                                                barrierColor: Colors.transparent,
-                                                builder: (BuildContext bc) {
-                                                  return Container(
-                                                    height: MediaQuery.of(context).size.height * 0.15,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                        children: [
-                                                          Icon(FontAwesomeIcons.boxOpen, color: Colors.black, size: 35),
-                                                          SizedBox(height: 4),
-                                                          Text(
-                                                            '${darwin.producto}', 
-                                                            style: TextStyle(fontSize: 22, color: Colors.black),
-                                                          ),
-                                                        ],
-                                                      ),
+                    Scrollbar(
+                      controller: _scrollController,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        controller: _horizontalScrollController,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width, // This ensures that your content takes the whole screen width
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                child: Row(
+                                  children: [
+                                    Expanded(child: Center(child: Text('Codigo', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    if (showLun) Expanded( child: Center(child: Text('Lun', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    if (showMar) Expanded( child: Center(child: Text('Mar', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    if (showMie) Expanded( child: Center(child: Text('Mie', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    if (showJue) Expanded( child: Center(child: Text('Jue', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    if (showVie) Expanded( child: Center(child: Text('Vie', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    if (showSab) Expanded( child: Center(child: Text('Sab', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                    Expanded( child: Center(child: Text('Total', style: TextStyle(fontSize: 16, color: Colors.grey)))),
+                                  ],
+                                ),
+                              ),
+                    ...weekDarwins.asMap().entries.map((entry) {
+                                int idx = entry.key;
+                                var darwin = entry.value;
+                                Color bgColor = idx.isEven ? Colors.white : (Colors.grey[300] ?? Colors.white); 
+                                return ValueListenableBuilder<String>(
+                                  valueListenable: selectedRowNotifier,
+                                  builder: (context, selectedRow, child) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        selectedRowNotifier.value = darwin.codProDarwin.toString();
+                                        showModalBottomSheet(
+                                          isScrollControlled: true,
+                                          context: context,
+                                          barrierColor: Colors.transparent,
+                                          builder: (BuildContext bc) {
+                                            return Container(
+                                              height: MediaQuery.of(context).size.height * 0.15,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(FontAwesomeIcons.boxOpen, color: Colors.black, size: 35),
+                                                    SizedBox(height: 4),
+                                                    Text(
+                                                      '${darwin.producto}', 
+                                                      style: TextStyle(fontSize: 22, color: Colors.black),
                                                     ),
-                                                  );
-                                                },
-                                              ).whenComplete(() => selectedRowNotifier.value = ''); // Resetea el valor después de cerrar el modal
-                                            },
-                                            child: Container(
-                                              color: selectedRow == darwin.codProDarwin.toString() ? Colors.grey : bgColor, // Se usa bgColor aquí
-                                              child: Row(
-                                                children: [
-                                                  isWide ? Expanded( child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold))),) 
-                                                         : Container( width: 75, child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold))),),
-                                                if (showLun)
-                                                  isWide ? Expanded(child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 18, color: Colors.black)))) 
-                                                         : Container(width: 50, child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 18, color: Colors.black)))),
-                                                if (showMar)
-                                                  isWide ? Expanded(child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 18, color: Colors.black)))) 
-                                                         : Container(width: 50, child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 18, color: Colors.black)))),
-                                                if (showMie)
-                                                  isWide ? Expanded(child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 18, color: Colors.black)))) 
-                                                         : Container(width: 50, child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 18, color: Colors.black)))),
-                                                if (showJue)
-                                                  isWide ? Expanded(child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 18, color: Colors.black)))) 
-                                                         : Container(width: 50, child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 18, color: Colors.black)))),
-                                                if (showVie)
-                                                  isWide ? Expanded(child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 18, color: Colors.black)))) 
-                                                         : Container(width: 50, child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 18, color: Colors.black)))),
-                                                if (showSab)
-                                                  isWide ? Expanded(child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 18, color: Colors.black)))) 
-                                                         : Container(width: 50, child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 18, color: Colors.black)))),
-                                              isWide ? Expanded(child: Center(child: Text('${(darwin.lun ?? 0) + (darwin.mar ?? 0) + (darwin.mie ?? 0) + (darwin.jue ?? 0) + (darwin.vie ?? 0) + (darwin.sab ?? 0)}', style: TextStyle(fontSize: 18, color: Colors.black),),),) 
-                                                     : Container(width: 50,  child: Center( child: Text('${(darwin.lun ?? 0) + (darwin.mar ?? 0) + (darwin.mie ?? 0) + (darwin.jue ?? 0) + (darwin.vie ?? 0) + (darwin.sab ?? 0)}',style: TextStyle(fontSize: 18, color: Colors.black),
-                                                  ),
+                                                  ],
                                                 ),
                                               ),
-                                              ],
-                                              ),
+                                            );
+                                          },
+                                        ).whenComplete(() => selectedRowNotifier.value = ''); // Resetea el valor después de cerrar el modal
+                                      },
+                                      child: Container(
+                                        color: selectedRow == darwin.codProDarwin.toString() ? Colors.grey : bgColor, // Se usa bgColor aquí
+                                        child: Row(
+                                          children: [
+                                            Expanded( child: Center(child: Text('${darwin.codProDarwin}', style: TextStyle(fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold))),),
+                                            if (showLun) Expanded( child: Center(child: Text('${darwin.lun}', style: TextStyle(fontSize: 18, color: Colors.black)))),
+                                            if (showMar) Expanded( child: Center(child: Text('${darwin.mar}', style: TextStyle(fontSize: 18, color: Colors.black)))),
+                                            if (showMie) Expanded( child: Center(child: Text('${darwin.mie}', style: TextStyle(fontSize: 18, color: Colors.black)))),
+                                            if (showJue) Expanded( child: Center(child: Text('${darwin.jue}', style: TextStyle(fontSize: 18, color: Colors.black)))),
+                                            if (showVie) Expanded( child: Center(child: Text('${darwin.vie}', style: TextStyle(fontSize: 18, color: Colors.black)))),
+                                            if (showSab) Expanded( child: Center(child: Text('${darwin.sab}', style: TextStyle(fontSize: 18, color: Colors.black)))),
+                                            Expanded(  child: Center( child: Text('${(darwin.lun ?? 0) + (darwin.mar ?? 0) + (darwin.mie ?? 0) + (darwin.jue ?? 0) + (darwin.vie ?? 0) + (darwin.sab ?? 0)}',style: TextStyle(fontSize: 18, color: Colors.black),
                                             ),
-                                          );
-                                        },
-                                      );
-                                    }).toList(),
-                                ],
-                              ),
-                            ),
+                                          ),
+                                        ),
+                                        ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
                     SizedBox(height: 16),
                   ],
                 );
@@ -264,8 +228,7 @@ Widget _buildRow(Icon icon, String title, String value) {
                           } else {
                             throw 'No se pudo lanzar $urlDescarga';
                           }
-                        }
-                        
+                        }                  
                       } catch (e) {
                         print('Error al descargar reportes: $e');
                       }    
